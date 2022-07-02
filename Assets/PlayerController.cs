@@ -3,13 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+
 public class PlayerController : MonoBehaviour
 {
     public float Health = 100f;
-
+    Animator animator;
     public float playerSpeed = 0.25f;
     private float lastXPosition;
-    public GameObject gameController;
+
+
+    bool isFishDead = false;
 
     // Start is called before the first frame update
     void Start()
@@ -27,17 +30,31 @@ public class PlayerController : MonoBehaviour
         transform.position = new Vector3(changeInX, changeInY);
 
         lastXPosition = transform.position.x;
+        if (Health <= 0)
+        {
+            SoundDie.SoundPlay();
+            Invoke("SceneChange", 1);
+
+        }
+
+
     }
+
     void OnTriggerEnter2D(Collider2D other)
     {
         Debug.Log("Äç");
-        Health-=5;
-
+        Health -= 5;
         if (other.gameObject.name == "flag")
         {
             SceneManager.LoadScene("ClearScene");
         }
 
     }
-
+    void SceneChange()
+    {
+        SceneManager.LoadScene("GameOverScene");
+    }
 }
+
+
+
